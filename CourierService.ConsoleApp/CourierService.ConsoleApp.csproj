@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CourierService.Application\CourierService.Application.csproj" />
+    <ProjectReference Include="..\CourierService.Domain\CourierService.Domain.csproj" />
+    <ProjectReference Include="..\CourierService.Infrastructure\CourierService.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
