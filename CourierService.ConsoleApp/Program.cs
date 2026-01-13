@@ -1,2 +1,67 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Microsoft.Extensions.DependencyInjection;
+using CourierService.Application.Interfaces;
+//using CourierService.Application.Services;
+using CourierService.Domain;
+using CourierService.Infrastructure.Offers;
+using CourierService.Infrastructure.Services;
+
+
+var services = new ServiceCollection();
+
+// Core services
+services.AddScoped<ICostCalculator, CostCalculator>();
+services.AddScoped<IDeliveryTimeEstimator, DeliveryTimeEstimator>();
+services.AddScoped<IShipmentPlanner, ShipmentPlanner>();
+
+// Offers
+services.AddScoped<IOfferStrategy, OfferOFR001>();
+services.AddScoped<IOfferStrategy, OfferOFR002>();
+services.AddScoped<IOfferStrategy, OfferOFR003>();
+
+var provider = services.BuildServiceProvider();
+
+var calculator = provider.GetRequiredService<ICostCalculator>();
+var estimator = provider.GetRequiredService<IDeliveryTimeEstimator>();
+var planner = provider.GetRequiredService<IShipmentPlanner>();
+
+
+var firstLine = Console.ReadLine()!.Split();
+int baseCost = int.Parse(firstLine[0]);
+int n = int.Parse(firstLine[1]);
+
+var packages = new List<Package>();
+
+for (int i = 0; i < n; i++)
+{
+    var input = Console.ReadLine()!.Split();
+    packages.Add(new Package(
+        input[0],
+        int.Parse(input[1]),
+        int.Parse(input[2]),
+        input[3]
+    ));
+}
+
+var vehicleInput = Console.ReadLine()!.Split();
+int vehicleCount = int.Parse(vehicleInput[0]);
+decimal  speed = decimal.Parse(vehicleInput[1]);
+decimal maxWeight = decimal.Parse(vehicleInput[2]);
+
+//var offers = new List<IOfferStrategy>
+//{
+//    new OfferOFR001(),
+//    new OfferOFR002(),
+//    new OfferOFR003()
+//};
+
+//var calculator = new CostCalculator(offers);
+foreach (var pkg in packages)
+    calculator.Calculate(pkg, baseCost);
+
+//var estimator = new DeliveryTimeEstimator();
+estimator.Estimate(packages, vehicleCount, speed, maxWeight);
+
+foreach (var pkg in packages)
+{
+    Console.WriteLine($"{pkg.Id} {pkg.Discount:0} {pkg.TotalCost:0} {pkg.DeliveryTime:0.00}");
+}
