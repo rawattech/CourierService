@@ -4,25 +4,33 @@ using CourierService.Application.Interfaces;
 using CourierService.Domain;
 using CourierService.Infrastructure.Offers;
 using CourierService.Infrastructure.Services;
+using Microsoft.Extensions.Hosting;
 
+var builder = Host.CreateApplicationBuilder(args);
 
-var services = new ServiceCollection();
+//var services = new ServiceCollection();
 
 // Core services
-services.AddScoped<ICostCalculator, CostCalculator>();
-services.AddScoped<IDeliveryTimeEstimator, DeliveryTimeEstimator>();
-services.AddScoped<IShipmentPlanner, ShipmentPlanner>();
+builder.Services.AddScoped<ICostCalculator, CostCalculator>();
+builder.Services.AddScoped<IDeliveryTimeEstimator, DeliveryTimeEstimator>();
+builder.Services.AddScoped<IShipmentPlanner, ShipmentPlanner>();
 
 // Offers
-services.AddScoped<IOfferStrategy, OfferOFR001>();
-services.AddScoped<IOfferStrategy, OfferOFR002>();
-services.AddScoped<IOfferStrategy, OfferOFR003>();
+var offers = OfferRuleProvider.Load(builder.Configuration);
+foreach (var offer in offers)
+{
+    builder.Services.AddSingleton(typeof(IOfferStrategy), offer);
+}
 
-var provider = services.BuildServiceProvider();
+//builder.Services.AddScoped<IOfferStrategy, OfferOFR001>();
+//builder.Services.AddScoped<IOfferStrategy, OfferOFR002>();
+//builder.Services.AddScoped<IOfferStrategy, OfferOFR003>();
 
-var calculator = provider.GetRequiredService<ICostCalculator>();
-var estimator = provider.GetRequiredService<IDeliveryTimeEstimator>();
-var planner = provider.GetRequiredService<IShipmentPlanner>();
+var provider = builder.Build();
+
+var calculator = provider.Services.GetRequiredService<ICostCalculator>();
+var estimator = provider.Services.GetRequiredService<IDeliveryTimeEstimator>();
+var planner = provider.Services.GetRequiredService<IShipmentPlanner>();
 
 
 var firstLine = Console.ReadLine()!.Split();
@@ -44,7 +52,7 @@ for (int i = 0; i < n; i++)
 
 var vehicleInput = Console.ReadLine()!.Split();
 int vehicleCount = int.Parse(vehicleInput[0]);
-decimal  speed = decimal.Parse(vehicleInput[1]);
+decimal speed = decimal.Parse(vehicleInput[1]);
 decimal maxWeight = decimal.Parse(vehicleInput[2]);
 
 //var offers = new List<IOfferStrategy>
