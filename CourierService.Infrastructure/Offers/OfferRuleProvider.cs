@@ -7,6 +7,9 @@ namespace CourierService.Infrastructure.Offers
     {
         public static IEnumerable<IOfferStrategy> Load(IConfiguration configuration)
         {
+            if (configuration == null || !configuration.GetChildren().Any())
+                throw new ArgumentException("Config missing");
+
             var rules = configuration
                 .GetSection("Offers")
                 .Get<List<OfferRule>>() ?? new();

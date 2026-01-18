@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using CourierService.Application.Interfaces;
-//using CourierService.Application.Services;
 using CourierService.Domain;
 using CourierService.Infrastructure.Offers;
 using CourierService.Infrastructure.Services;
 using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateApplicationBuilder(args);
-
-//var services = new ServiceCollection();
 
 // Core services
 builder.Services.AddScoped<ICostCalculator, CostCalculator>();
@@ -21,10 +18,6 @@ foreach (var offer in offers)
 {
     builder.Services.AddSingleton(typeof(IOfferStrategy), offer);
 }
-
-//builder.Services.AddScoped<IOfferStrategy, OfferOFR001>();
-//builder.Services.AddScoped<IOfferStrategy, OfferOFR002>();
-//builder.Services.AddScoped<IOfferStrategy, OfferOFR003>();
 
 var provider = builder.Build();
 
@@ -55,18 +48,9 @@ int vehicleCount = int.Parse(vehicleInput[0]);
 decimal speed = decimal.Parse(vehicleInput[1]);
 decimal maxWeight = decimal.Parse(vehicleInput[2]);
 
-//var offers = new List<IOfferStrategy>
-//{
-//    new OfferOFR001(),
-//    new OfferOFR002(),
-//    new OfferOFR003()
-//};
-
-//var calculator = new CostCalculator(offers);
 foreach (var pkg in packages)
     calculator.Calculate(pkg, baseCost);
 
-//var estimator = new DeliveryTimeEstimator();
 estimator.Estimate(packages, vehicleCount, speed, maxWeight);
 
 foreach (var pkg in packages)

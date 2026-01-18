@@ -4,6 +4,7 @@ namespace CourierService.Application.Interfaces
 {
     public interface ICostCalculator
     {
-        void Calculate(Package package, int baseCost);
+        void Calculate(Package package,
+                       int baseCost);
     }
 }

@@ -13,7 +13,7 @@ namespace CourierService.Tests
         public void Should_calculate_cost_without_offer()
         {
             // Arrange
-            var offers = new List<OfferOFR001>();
+            var offers = new List<IOfferStrategy>();
             var calculator = new CostCalculator(offers);
             var pkg = new Package("PKG1", 5, 5, "NA");
 
@@ -51,7 +51,7 @@ namespace CourierService.Tests
         public void Should_not_apply_discount_if_offer_not_found()
         {
             // Arrange
-            var calculator = new CostCalculator(new List<OfferOFR001>());
+            var calculator = new CostCalculator(new List<IOfferStrategy>());
             var pkg = new Package("PKG1", 50, 30, "INVALID");
 
             // Act

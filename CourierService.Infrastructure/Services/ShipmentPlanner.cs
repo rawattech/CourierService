@@ -10,9 +10,9 @@ namespace CourierService.Infrastructure.Services
             var allCombos = GetAllValidCombinations(packages, maxWeight);
 
             return allCombos
-                .OrderByDescending(c => c.Sum(p => p.Weight))         // 2️⃣ max weight            
-                .ThenByDescending(c => c.Count)                      // 1️⃣ max packages
-                .ThenBy(c => c.Max(p => p.Distance))                // 3️⃣ earliest delivery
+                .OrderByDescending(c => c.Sum(p => p.Weight))         // 1 max weight            
+                .ThenByDescending(c => c.Count)                      // 2 max packages
+                .ThenBy(c => c.Max(p => p.Distance))                // 3 earliest delivery
                 .First();
         }
 

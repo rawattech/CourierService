@@ -23,5 +23,25 @@ namespace CourierService.Tests
             shipment.ToList().First().Weight.Should().Be(175);
             shipment.ToList().First().Id.Should().Contain("PKG3");
         }
+
+        [Fact]
+        public void SelectShipment_MaximizesPackageCount()
+        {
+            // Arrange
+            var packages = new List<Package>
+            {
+                new("PKG1", 50, 10, "NA"),
+                new("PKG2", 60, 20, "NA"),
+                new("PKG3", 70, 30, "NA")
+            };
+
+            var selector = new ShipmentPlanner();
+
+            // Act  
+            var shipment = selector.PlanShipment(packages, 200);
+
+            // Assert
+            Assert.Equal(3, shipment.Count);
+        }
     }
 }
