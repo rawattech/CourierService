@@ -10,6 +10,16 @@ Delivery time estimation using vehicle constraints
 Shipment selection based on business rules
 Fully unit-tested using mocks and DI
 
+# appsettings.json
+
+The application uses appsettings.json to store configuration values. This helps avoid hardcoding and makes changes easier.
+
+ # What it contains
+
+Base delivery cost
+Vehicle details (count, max weight, speed)
+Offer details (code, weight range, distance range, discount)
+
 # Tech Stack
 
 .NET 8
